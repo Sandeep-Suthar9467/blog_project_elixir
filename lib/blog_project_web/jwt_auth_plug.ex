@@ -8,7 +8,7 @@ defmodule BlogProjectWeb.JWTAuthPlug do
   def init(opts), do: opts
 
   def call(conn, _) do
-    bearer = get_req_header(conn, "token") |> List.first()
+    bearer = get_req_header(conn, "authorization") |> List.first()
 
     if bearer == nil do
       conn |> put_status(401) |> halt

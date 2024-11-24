@@ -41,6 +41,11 @@ defmodule BlogProject.Blog do
     Repo.get_by(Post, public_id: public_id)
   end
 
+
+  def get_post_by_user_id(user_id) do
+    Repo.all(Post, user_id: user_id)
+  end
+
   @doc """
   Creates a post.
 

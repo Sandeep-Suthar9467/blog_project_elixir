@@ -46,7 +46,14 @@ defmodule BlogProjectWeb.Router do
       post "/signin", UserController, :login
     end
 
-    resources "/posts", PostController, only: [:index, :create, :show]
+    resources "/posts", PostController, only: [:index, :show]
+
+    scope "/post" do
+      pipe_through([:auth])
+      post "/create", PostController, :create
+
+      get "/user_blog", PostController, :show_user_blog
+    end
   end
 
   # Other scopes may use custom stacks.

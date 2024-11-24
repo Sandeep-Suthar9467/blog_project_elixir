@@ -40,6 +40,7 @@ defmodule BlogProject.MixProject do
       {:phoenix_view, "~> 2.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:cors_plug, "~> 3.0"},
+      {:uuid, "~> 1.1.8"},
       # TODO bump on release to {:phoenix_live_view, "~> 1.0.0"},
       {:phoenix_live_view, "~> 1.0.0-rc.1", override: true},
       {:floki, ">= 0.30.0", only: :test},

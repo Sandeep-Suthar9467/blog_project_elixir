@@ -16,6 +16,13 @@ defmodule BlogProjectWeb.PostController do
   # end
 
   def create(conn, %{"post" => post_params}) do
+    user = Map.get(conn.assigns, :current_user)
+    post_params = mixed_maps_to_atom(Map.merge(post_params, %{
+      user_id: user.id,
+      posted_on: DateTime.utc_now(),
+      public_id: UUID.uuid4()
+    }))
+    IO.inspect(post_params)
     case Blog.create_post(post_params) do
       {:ok, post} ->
         conn
@@ -29,8 +36,13 @@ defmodule BlogProjectWeb.PostController do
 
   def show(conn, %{"id" => id}) do
     post = Blog.get_post_by_public_id(id)
-    IO.inspect(post)
     render(conn, "post.json", post: post)
+  end
+
+  def show_user_blog(conn, params) do
+    user = Map.get(conn.assigns, :current_user)
+    posts = Blog.get_post_by_user_id(user.id)
+    render(conn, "user_post.json", posts: posts || [], user: user)
   end
 
   # def edit(conn, %{"id" => id}) do
@@ -61,4 +73,15 @@ defmodule BlogProjectWeb.PostController do
   #   |> put_flash(:info, "Post deleted successfully.")
   #   |> redirect(to: ~p"/posts")
   # end
+
+
+  def mixed_maps_to_atom(map) do
+    Enum.reduce(map, %{}, fn
+      {key, value}, acc when is_atom(key) -> Map.put(acc, key, value)
+      # String.to_existing_atom saves us from overloading the VM by
+      # creating too many atoms. It'll always succeed because all the fields
+      # in the database already exist as atoms at runtime.
+      {key, value}, acc when is_binary(key) -> Map.put(acc, :"#{key}", value)
+    end)
+  end
 end

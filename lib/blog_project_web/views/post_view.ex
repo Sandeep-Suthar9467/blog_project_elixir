@@ -25,4 +25,12 @@ defmodule BlogProjectWeb.PostView do
       }
     }
   end
+
+  def render("user_post.json", %{posts: posts, user: user}) do
+    %{
+      posts: render_many(posts, __MODULE__, "post.json"),
+      name: user.name,
+      email: user.email
+    }
+  end
 end

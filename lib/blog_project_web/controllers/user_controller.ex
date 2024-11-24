@@ -48,7 +48,7 @@ defmodule BlogProjectWeb.UserController do
           "zrhYVRfAP4uNwYVPxrngiqhrlJhB/Wd2REcf9W870RL2O+Mq/bfVVZl0rJWT2WFz"
         )
 
-      extra_claims = %{user_id: user.id}
+      extra_claims = %{user_id: user.id, name: user.name}
       {:ok, token, _claims} = JWTToken.generate_and_sign(extra_claims, signer)
 
       conn
@@ -60,7 +60,6 @@ defmodule BlogProjectWeb.UserController do
       })
     else
       _ ->
-        IO.inspect("error")
         {:error, :unauthorized}
     end
   end
@@ -78,7 +77,7 @@ defmodule BlogProjectWeb.UserController do
   end
 
   defp get_token(conn) do
-    bearer = get_req_header(conn, "token") |> List.first()
+    bearer = get_req_header(conn, "authorization") |> List.first()
 
     if bearer == nil do
       ""
