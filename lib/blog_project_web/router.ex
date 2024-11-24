@@ -10,14 +10,20 @@ defmodule BlogProjectWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
-  
+
   pipeline :cors do
     plug(CORSPlug,
       origin: &CORS.origins/0,
       max_age: 86_400,
       methods: ["GET", "POST", "PUT"],
+      headers: ["Authorization", "Content-Type"],
+      expose: ["Authorization"],
       send_preflight_response?: false
     )
+  end
+
+  pipeline :auth do
+    plug BlogProjectWeb.JWTAuthPlug
   end
 
   pipeline :api do
@@ -30,10 +36,16 @@ defmodule BlogProjectWeb.Router do
   #   get "/", PageController, :home
   # end
 
-  scope "/api", BlogProjectWeb do
-    pipe_through([:api,:cors])
-    resources "/users", UserController, only: [:create]
-    
+  scope "/api/v1", BlogProjectWeb do
+    pipe_through([:cors, :api])
+
+    scope "/user" do
+      get "/ping", UserController, :ping
+      post "/signup", UserController, :register
+
+      post "/signin", UserController, :login
+    end
+
     resources "/posts", PostController, only: [:index, :create, :show]
   end
 

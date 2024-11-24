@@ -13,4 +13,7 @@ defmodule BlogProjectWeb.UserView do
       updated_at: user.updated_at
     }
   end
+
+  def render("ack.json", %{jwt: jwt, success: success, message: message}),
+    do: %{jwt: jwt, success: success, message: message}
 end

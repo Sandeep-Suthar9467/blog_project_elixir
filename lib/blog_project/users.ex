@@ -24,12 +24,22 @@ defmodule BlogProject.Users do
     Repo.get(User, id)
   end
 
-    @doc """
+  @doc """
   Creates a new user.
   """
   def create_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def get_user_by_username(name) do
+    Repo.get_by(User, name: name)
+    # from(
+    #   u in User,
+    #   where: u.name == ^username,
+    #   select: [:id, :inserted_at, :updated_at]
+    # )
+    # |> Repo.one()
   end
 end

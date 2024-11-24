@@ -55,4 +55,28 @@ defmodule BlogProjectWeb.FallbackController do
       |> Jason.encode!()
     )
   end
+
+  def call(conn, {:error, :unprocessable_entity, %{} = error_object}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      422,
+      %{
+        error: "unprocessable_entity",
+        reason: error_object[:error],
+        details: error_object[:details]
+      }
+      |> Jason.encode!()
+    )
+  end
+
+  def call(conn, {:error, :unprocessable_entity, message}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      422,
+      %{error: "unprocessable_entity", reason: message}
+      |> Jason.encode!()
+    )
+  end
 end

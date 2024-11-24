@@ -58,6 +58,8 @@ defmodule BlogProject.MixProject do
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
+      {:pbkdf2_elixir, "~> 2.0.0"},
+      {:joken, "~> 2.4.1"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"}

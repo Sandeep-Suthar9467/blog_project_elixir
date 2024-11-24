@@ -1,5 +1,8 @@
 defmodule BlogProjectWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :blog_project
+  alias BlogProjectWeb.Utils.CORS
+
+  plug BlogProjectWeb.Plug.DisallowOptions
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -45,6 +48,12 @@ defmodule BlogProjectWeb.Endpoint do
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
+
+  plug CORSPlug,
+    origin: &CORS.origins/0,
+    max_age: 86_400,
+    methods: ["GET", "POST", "PUT"],
+    send_preflight_response?: false
 
   plug Plug.MethodOverride
   plug Plug.Head

@@ -37,10 +37,10 @@ defmodule BlogProject.Blog do
   """
   def get_post!(id), do: Repo.get!(Post, id)
 
-
   def get_post_by_public_id(public_id) do
     Repo.get_by(Post, public_id: public_id)
   end
+
   @doc """
   Creates a post.
 
